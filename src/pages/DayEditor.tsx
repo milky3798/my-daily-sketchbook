@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import CanvasEditor from "../components/CanvasEditor";
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Camera, ImagePlus, X } from 'lucide-react';
@@ -20,6 +21,7 @@ const DayEditor = () => {
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
   const [saveMessage, setSaveMessage] = useState('');
   const [showMoodPicker, setShowMoodPicker] = useState(false);
+  const [showCanvas, setShowCanvas] = useState(false);
 
   useEffect(() => {
     if (date) {
@@ -247,13 +249,21 @@ const DayEditor = () => {
       </div>
 
       {/* Floating Action Button */}
-      <div className="fixed bottom-24 right-6">
-        <button
-          onClick={() => setShowActions(!showActions)}
-          className="floating-btn"
-        >
-          {showActions ? '✕' : '＋'}
-        </button>
+<div className="fixed bottom-24 right-6">
+
+<button
+  onClick={() => setShowCanvas(true)}
+  className="floating-btn mb-3"
+>
+  🎨
+</button>
+
+<button
+  onClick={() => setShowActions(!showActions)}
+  className="floating-btn"
+>
+  ＋
+</button>
 
         <AnimatePresence>
           {showActions && (
@@ -302,8 +312,22 @@ const DayEditor = () => {
 
       {/* Decorative */}
       <div className="deco-clip top-16 right-4 rotate-6">📎</div>
+
+    {showCanvas && (
+  <div className="fixed inset-0 z-50 bg-background">
+    <button
+      onClick={() => setShowCanvas(false)}
+      className="absolute top-4 right-4 z-50 px-4 py-2 bg-black text-white rounded-lg"
+    >
+      关闭
+    </button>
+
+    <CanvasEditor />
+  </div>
+)}
     </motion.div>
   );
 };
+
 
 export default DayEditor;
