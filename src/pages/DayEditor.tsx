@@ -322,7 +322,7 @@ const DayEditor = () => {
       关闭
     </button>
 
-    <CanvasEditor />
+    <CanvasEditor date={date} />
   </div>
 )}
     </motion.div>
