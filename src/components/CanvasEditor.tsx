@@ -32,7 +32,7 @@ export default function CanvasEditor({ date }) {
 
     btn.onclick = async () => {
 
-      const data = editor.store.getSnapshot()
+      const data = editor.getSnapshot()
 
       await saveCanvas(date, data)
 
@@ -45,6 +45,7 @@ export default function CanvasEditor({ date }) {
   return (
     <div style={{ position: "fixed", inset: 0 }}>
       <Tldraw
+        licenseKey="free"
         snapshot={snapshot}
         onMount={handleMount}
       />
