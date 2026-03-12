@@ -32,6 +32,8 @@ const Calendar = () => {
   };
 
   const [showMenu, setShowMenu] = useState(false);
+
+  const handleLongPress = (day: number) => {
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     setMoodPicker(dateStr);
   };
