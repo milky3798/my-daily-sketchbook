@@ -45,7 +45,6 @@ export default function CanvasEditor({ date }) {
   return (
     <div style={{ position: "fixed", inset: 0 }}>
       <Tldraw
-        licenseKey="free"
         snapshot={snapshot}
         onMount={handleMount}
       />
