@@ -102,12 +102,34 @@ const Calendar = () => {
           <span className="text-2xl">🎨</span>
           <span className="font-handwriting text-2xl text-primary">随记</span>
         </div>
-        <button
-          onClick={() => navigate('/settings')}
-          className="p-2 rounded-lg hover:bg-secondary transition-colors"
-        >
-          <Menu className="w-5 h-5 text-foreground" />
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setShowMenu(!showMenu)}
+            className="p-2 rounded-lg hover:bg-secondary transition-colors"
+          >
+            <Menu className="w-5 h-5 text-foreground" />
+          </button>
+          {showMenu && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="absolute right-0 top-10 bg-card rounded-xl paper-border shadow-lg z-30 min-w-[140px] overflow-hidden"
+            >
+              <button
+                onClick={() => { setShowMenu(false); navigate('/stats'); }}
+                className="w-full text-left px-4 py-3 font-chinese-hand text-foreground hover:bg-secondary transition-colors"
+              >
+                📊 我的记录
+              </button>
+              <button
+                onClick={() => { setShowMenu(false); navigate('/settings'); }}
+                className="w-full text-left px-4 py-3 font-chinese-hand text-foreground hover:bg-secondary transition-colors"
+              >
+                ⚙️ 设置
+              </button>
+            </motion.div>
+          )}
+        </div>
       </div>
 
       <EncouragementBanner />
