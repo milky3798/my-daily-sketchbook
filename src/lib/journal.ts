@@ -147,6 +147,19 @@ export function getMoodStats(): { emoji: string; label: string; count: number }[
   return Object.values(moodMap).sort((a, b) => b.count - a.count);
 }
 
+export async function syncOffline() {
+
+  const data = JSON.parse(
+    localStorage.getItem("offline-journals") || "[]"
+  );
+
+  for (const entry of data) {
+    await saveEntryWithGitHub(entry);
+  }
+
+  localStorage.removeItem("offline-journals");
+}
+
 function getMoodLabel(emoji: string): string {
   const labels: Record<string, string> = {
     '😊': '开心', '😴': '累', '🏃': '运动', '📚': '学习',
