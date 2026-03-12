@@ -226,7 +226,7 @@ const DayEditor = () => {
           onClick={() => setShowActions(!showActions)}
           className="floating-btn"
         >
-          {showActions ? '✕' : '●'}
+          {showActions ? '✕' : '＋'}
         </button>
 
         <AnimatePresence>
