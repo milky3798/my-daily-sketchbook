@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import SplashScreen from '@/components/SplashScreen';
 import Calendar from '@/pages/Calendar';
 import DayEditor from '@/pages/DayEditor';
@@ -17,7 +17,7 @@ const App = () => {
   return (
     <div className="max-w-lg mx-auto min-h-screen relative">
       {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Calendar />} />
           <Route path="/day/:date" element={<DayEditor />} />
@@ -25,7 +25,7 @@ const App = () => {
           <Route path="/stats" element={<Stats />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 };
