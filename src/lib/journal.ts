@@ -1,4 +1,6 @@
-// Journal data management with localStorage
+// Journal data management with localStorage and GitHub
+
+import { getGitHubConfig, saveToGitHub } from './github';
 
 export interface JournalEntry {
   date: string; // YYYY-MM-DD
@@ -32,6 +34,28 @@ export function saveEntry(entry: JournalEntry): void {
   const entries = getEntries();
   entries[entry.date] = { ...entry, updatedAt: Date.now() };
   localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
+}
+
+export async function saveEntryWithGitHub(entry: JournalEntry): Promise<boolean> {
+  // 1. 先保存到本地
+  saveEntry(entry);
+  
+  // 2. 尝试保存到 GitHub
+  const config = getGitHubConfig();
+  if (config.enabled && config.token) {
+    try {
+      const success = await saveToGitHub(config, entry.date, {
+        text: entry.text,
+        mood: entry.mood,
+        photos: entry.photos,
+      });
+      return success;
+    } catch (error) {
+      console.error('GitHub 同步失败:', error);
+      return false;
+    }
+  }
+  return true; // 没有启用 GitHub 也算成功
 }
 
 export function getSettings(): JournalSettings {
@@ -123,7 +147,7 @@ export function getMoodStats(): { emoji: string; label: string; count: number }[
 function getMoodLabel(emoji: string): string {
   const labels: Record<string, string> = {
     '😊': '开心', '😴': '累', '🏃': '运动', '📚': '学习',
-    '❤️': '恋爱', '💻': '工作', '😷': '生病', '😤': '生气',
+    '❤️': '愉悦', '💻': '工作', '😷': '生病', '😤': '生气',
     '🎮': '游戏', '✍️': '创作', '☕': '休闲', '🌸': '出游',
     '🎂': '庆祝',
   };
