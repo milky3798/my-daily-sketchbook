@@ -37,25 +37,28 @@ export function saveEntry(entry: JournalEntry): void {
 }
 
 export async function saveEntryWithGitHub(entry: JournalEntry): Promise<boolean> {
-  // 1. 先保存到本地
+
+  // 1 保存到本地
   saveEntry(entry);
-  
-  // 2. 尝试保存到 GitHub
-  const config = getGitHubConfig();
-  if (config.enabled && config.token) {
-    try {
-      const success = await saveToGitHub(config, entry.date, {
-        text: entry.text,
-        mood: entry.mood,
-        photos: entry.photos,
-      });
-      return success;
-    } catch (error) {
-      console.error('GitHub 同步失败:', error);
-      return false;
-    }
+
+  try {
+
+    const res = await fetch("/.netlify/functions/save-journal", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(entry)
+    });
+
+    const data = await res.json();
+
+    return data.success;
+
+  } catch (error) {
+    console.error("同步失败", error);
+    return false;
   }
-  return true; // 没有启用 GitHub 也算成功
 }
 
 export function getSettings(): JournalSettings {
