@@ -64,18 +64,44 @@ const DayEditor = () => {
     }
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files) return;
-    Array.from(files).forEach(file => {
+  const compressImage = (file: File, maxWidth = 800, quality = 0.7): Promise<string> => {
+    return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = (ev) => {
-        if (ev.target?.result) {
-          setPhotos(prev => [...prev, ev.target!.result as string]);
-        }
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let { width, height } = img;
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) { reject(new Error('Canvas not supported')); return; }
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = reject;
+        img.src = ev.target?.result as string;
       };
+      reader.onerror = reject;
       reader.readAsDataURL(file);
     });
+  };
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    for (const file of Array.from(files)) {
+      try {
+        const compressed = await compressImage(file);
+        setPhotos(prev => [...prev, compressed]);
+      } catch (err) {
+        console.error('图片压缩失败:', err);
+      }
+    }
     setShowActions(false);
   };
 
