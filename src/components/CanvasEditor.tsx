@@ -1,11 +1,12 @@
 import { Tldraw } from "@tldraw/tldraw"
 import "@tldraw/tldraw/tldraw.css"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { saveCanvas, loadCanvas } from "@/lib/githubCanvas"
 
 export default function CanvasEditor({ date }) {
 
   const [snapshot, setSnapshot] = useState(null)
+  const saveTimeout = useRef(null)
 
   useEffect(() => {
     const load = async () => {
@@ -18,28 +19,24 @@ export default function CanvasEditor({ date }) {
 
   const handleMount = (editor) => {
 
-    const btn = document.createElement("button")
+    editor.store.listen(() => {
 
-    btn.innerText = "保存画布"
+      if (saveTimeout.current) {
+        clearTimeout(saveTimeout.current)
+      }
 
-    btn.style.position = "absolute"
-    btn.style.top = "20px"
-    btn.style.left = "20px"
-    btn.style.zIndex = "1000"
-    btn.style.padding = "10px"
-    btn.style.background = "black"
-    btn.style.color = "white"
+      saveTimeout.current = setTimeout(async () => {
 
-    btn.onclick = async () => {
+        const data = editor.getSnapshot()
 
-      const data = editor.getSnapshot()
+        await saveCanvas(date, data)
 
-      await saveCanvas(date, data)
+        console.log("自动保存成功")
 
-      alert("画布已保存")
-    }
+      }, 2000)
 
-    document.body.appendChild(btn)
+    })
+
   }
 
   return (
