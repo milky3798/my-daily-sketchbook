@@ -57,6 +57,20 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        journal: {
+          cream: "hsl(var(--journal-cream))",
+          warm: "hsl(var(--journal-warm))",
+          "light-brown": "hsl(var(--journal-light-brown))",
+          text: "hsl(var(--journal-text))",
+          soft: "hsl(var(--journal-soft))",
+          highlight: "hsl(var(--journal-highlight))",
+          success: "hsl(var(--journal-success))",
+        },
+      },
+      fontFamily: {
+        handwriting: ["Caveat", "cursive"],
+        "chinese-hand": ["Ma Shan Zheng", "ZCOOL XiaoWei", "cursive"],
+        body: ["ZCOOL XiaoWei", "Ma Shan Zheng", "serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -65,20 +79,12 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       animation: {
